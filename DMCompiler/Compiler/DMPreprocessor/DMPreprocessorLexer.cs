@@ -51,7 +51,7 @@ namespace DMCompiler.Compiler.DMPreprocessor {
                             //The next character turns into an identifier.
                             token = CreateToken(TokenType.DM_Preproc_Identifier, GetCurrent());
                         }
-                        
+
                         Advance();
                         break;
                     }
@@ -235,7 +235,7 @@ namespace DMCompiler.Compiler.DMPreprocessor {
                                         Advance();
                                     }
                                 }
-                                
+
                                 while (GetCurrent() == ' ' || GetCurrent() == '\t') {
                                     Advance();
                                 }
@@ -408,7 +408,18 @@ namespace DMCompiler.Compiler.DMPreprocessor {
                 char stringC = GetCurrent();
 
                 textBuilder.Append(stringC);
-                if (stringC == '[') {
+                if (stringC == '\\') {
+                    if (Advance() == '\n') { //Line splice
+                        //Remove the '\' from textBuilder and ignore newlines & all incoming whitespace
+                        textBuilder.Remove(textBuilder.Length - 1, 1);
+                        do {
+                            Advance();
+                        } while (GetCurrent() == '\n' || GetCurrent() == ' ' || GetCurrent() == '\t');
+                    } else {
+                        textBuilder.Append(GetCurrent());
+                        Advance();
+                    }
+                } else if (stringC == '[') {
                     stringTokens.Enqueue(CreateToken(TokenType.DM_Preproc_String, textBuilder.ToString()));
                     textBuilder.Clear();
 
@@ -426,17 +437,6 @@ namespace DMCompiler.Compiler.DMPreprocessor {
 
                     if (exprToken.Type != TokenType.DM_Preproc_Punctuator_RightBracket) return CreateToken(TokenType.Error, null, "Expected ']' to end expression");
                     textBuilder.Append(']');
-                } else if (stringC == '\\') {
-                    if (Advance() == '\n') { //Line splice
-                        //Remove the '\' from textBuilder and ignore newlines & all incoming whitespace
-                        textBuilder.Remove(textBuilder.Length - 1, 1);
-                        do {
-                            Advance();
-                        } while (GetCurrent() == '\n' || GetCurrent() == ' ' || GetCurrent() == '\t');
-                    } else {
-                        textBuilder.Append(GetCurrent());
-                        Advance();
-                    }
                 } else if (stringC == terminator) {
                     if (isLong) {
                         stringC = Advance();
