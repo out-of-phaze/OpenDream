@@ -24,8 +24,13 @@ namespace Content.Tests {
 
         public void SetTurfAppearance(DreamObject turf, IconAppearance appearance) { }
 
-        public IconAppearance GetTurfAppearance(DreamObject turf) {
+        public IconAppearance MustGetTurfAppearance(DreamObject turf) {
             return new IconAppearance();
+        }
+
+        public bool TryGetTurfAppearance(DreamObject turf, out IconAppearance appearance) {
+            appearance = MustGetTurfAppearance(turf);
+            return true;
         }
 
         public bool TryGetTurfAt(Vector2i pos, int z, out DreamObject turf) {
