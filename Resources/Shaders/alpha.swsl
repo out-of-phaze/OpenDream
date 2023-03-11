@@ -1,0 +1,31 @@
+
+uniform highp float x;
+uniform highp float y;   
+uniform highp int flags;
+uniform sampler2D mask_texture;
+
+void fragment() {
+    highp vec4 new_color;
+    highp vec2 crop_size = vec2(textureSize(TEXTURE, 0));
+    highp vec2 mask_size = vec2(textureSize(mask_texture, 0));
+    highp vec2 ratio;
+    bool mask_swap_flag = (flags & 2) == 2;
+    bool mask_invert_flag = (flags & 1) == 1;
+
+    if(mask_swap_flag){ 
+        new_color = texture(mask_texture, UV);
+        ratio = vec2(1,1); 
+    }
+    else{
+        new_color = texture(TEXTURE, UV);  
+        ratio = crop_size/mask_size;
+    }
+
+    highp vec4 mask_crop = texture(mask_texture, (-ratio/2.0+0.5)+UV*ratio);
+
+    if( (mask_invert_flag ^^ (mask_crop.a == 0.0)) || new_color.a == 0.0 ){
+        new_color.a = 0.0;
+    }
+
+    COLOR = new_color;
+}

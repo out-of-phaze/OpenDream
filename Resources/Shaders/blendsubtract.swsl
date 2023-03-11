@@ -1,0 +1,6 @@
+light_mode unshaded;
+blend_mode subtract;
+
+void fragment() {
+    COLOR = zTexture(UV);
+}
