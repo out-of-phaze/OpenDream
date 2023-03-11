@@ -5,6 +5,9 @@
 	var/screen_loc as opendream_unimplemented
 
 	New(var/datum/copy_from)
+		if (istype(copy_from, /atom))
+			var/atom/to_copy = copy_from
+			copy_from = to_copy.appearance
 		if (istype(copy_from, /mutable_appearance))
 			var/mutable_appearance/appearance = copy_from
 
