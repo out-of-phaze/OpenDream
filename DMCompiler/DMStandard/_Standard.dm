@@ -11,6 +11,7 @@ proc/arccos(X)
 proc/arcsin(X)
 proc/arctan(A)
 proc/ascii2text(N)
+proc/block(var/atom/Start, var/atom/End)
 proc/ceil(A)
 proc/ckey(Key)
 proc/ckeyEx(Text)
@@ -36,6 +37,8 @@ proc/flist(Path)
 proc/floor(A)
 proc/fract(n)
 proc/ftime(File, IsCreationTime = 0)
+proc/get_dir(atom/Loc1, atom/Loc2)
+proc/get_step(atom/Ref, Dir)
 proc/gradient(A, index)
 proc/hascall(Object, ProcName)
 proc/html_decode(HtmlText)
@@ -144,53 +147,6 @@ proc/winset(player, control_id, params)
 proc/replacetextEx_char(Haystack, Needle, Replacement, Start = 1, End = 0)
 	set opendream_unimplemented = TRUE
 	return Haystack
-
-proc/block(var/atom/Start, var/atom/End)
-	var/list/atoms = list()
-
-	var/startX = min(Start.x, End.x)
-	var/startY = min(Start.y, End.y)
-	var/startZ = min(Start.z, End.z)
-	var/endX = max(Start.x, End.x)
-	var/endY = max(Start.y, End.y)
-	var/endZ = max(Start.z, End.z)
-	for (var/z=startZ; z<=endZ; z++)
-		for (var/y=startY; y<=endY; y++)
-			for (var/x=startX; x<=endX; x++)
-				atoms.Add(locate(x, y, z))
-
-	return atoms
-
-proc/get_step(atom/Ref, Dir)
-	if (Ref == null) return null
-
-	var/x = Ref.x
-	var/y = Ref.y
-	var/z = Ref.z
-
-	if (Dir & NORTH) y += 1
-	else if (Dir & SOUTH) y -= 1
-
-	if (Dir & EAST) x += 1
-	else if (Dir & WEST) x -= 1
-
-	if (Dir & UP) z += 1
-	else if (Dir & DOWN) z -= 1
-
-	return locate(x, y, z)
-
-proc/get_dir(atom/Loc1, atom/Loc2)
-	if (Loc1 == null || Loc2 == null || Loc1.z != Loc2.z) return 0
-
-	var/dir = 0
-
-	if (Loc2.x < Loc1.x) dir |= WEST
-	else if (Loc2.x > Loc1.x) dir |= EAST
-
-	if (Loc2.y < Loc1.y) dir |= SOUTH
-	else if (Loc2.y > Loc1.y) dir |= NORTH
-
-	return dir
 
 /proc/step(atom/movable/Ref, var/Dir, var/Speed=0)
 	//TODO: Speed = step_size if Speed is 0
