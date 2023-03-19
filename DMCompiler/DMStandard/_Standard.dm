@@ -102,6 +102,7 @@ proc/stat(Name, Value)
 proc/statpanel(Panel, Name, Value)
 proc/tan(X)
 proc/text2ascii(T, pos = 1)
+proc/text2ascii_char(T, pos = 1)
 proc/text2file(Text, File)
 proc/text2num(T, radix = 10)
 proc/text2path(T)
@@ -264,7 +265,9 @@ proc/step_rand(atom/movable/Ref, Speed=0)
 proc/jointext(list/List, Glue, Start = 1, End = 0)
 	if(islist(List))
 		return List.Join(Glue, Start, End)
-	return List
+	if(istext(List))
+		return List
+	CRASH("jointext was passed a non-list, non-text value")
 
 proc/lentext(T)
 	return length(T)
