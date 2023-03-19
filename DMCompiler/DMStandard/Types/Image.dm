@@ -47,7 +47,7 @@
 	var/z
 	var/list/vis_contents = list() as opendream_unimplemented
 
-	var/dir = SOUTH
+	var/dir = 0
 	var/icon
 	var/icon_state
 
