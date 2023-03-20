@@ -210,7 +210,7 @@ namespace OpenDreamRuntime {
             level.QueuedTileUpdates[pos] = new Tile(turfId);
         }
 
-        public IconAppearance GetTurfAppearance(DreamObject turf) {
+        private uint GetAppearanceIDForTurf(DreamObject turf) {
             (Vector2i pos, Level level) = _turfToTilePos[turf];
 
             if (!level.QueuedTileUpdates.TryGetValue(pos, out var tile)) {
@@ -218,7 +218,16 @@ namespace OpenDreamRuntime {
             }
 
             uint appearanceId = (uint)tile.TypeId - 1;
-            return _appearanceSystem.GetAppearance(appearanceId);
+            return appearanceId;
+        }
+
+        public IconAppearance MustGetTurfAppearance(DreamObject turf) {
+            
+            return _appearanceSystem.MustGetAppearance(GetAppearanceIDForTurf(turf));
+        }
+
+        public bool TryGetTurfAppearance(DreamObject turf, [NotNullWhen(true)] out IconAppearance? appearance) {
+            return _appearanceSystem.TryGetAppearance(GetAppearanceIDForTurf(turf), out appearance);
         }
 
         public bool TryGetTurfAt(Vector2i pos, int z, [NotNullWhen(true)] out DreamObject? turf) {
@@ -369,7 +378,9 @@ namespace OpenDreamRuntime {
 
         public void SetTurf(DreamObject turf, DreamObjectDefinition type, DreamProcArguments creationArguments);
         public void SetTurfAppearance(DreamObject turf, IconAppearance appearance);
-        public IconAppearance GetTurfAppearance(DreamObject turf);
+        public IconAppearance MustGetTurfAppearance(DreamObject turf);
+
+        public bool TryGetTurfAppearance(DreamObject turf, out IconAppearance? appearance);
         public bool TryGetTurfAt(Vector2i pos, int z, [NotNullWhen(true)] out DreamObject? turf);
         public (Vector2i Pos, DreamMapManager.Level Level) GetTurfPosition(DreamObject turf);
         public DreamObject GetAreaAt(DreamObject turf);
