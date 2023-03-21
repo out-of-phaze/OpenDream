@@ -200,6 +200,9 @@ namespace OpenDreamShared.Dream {
                 return;
             }
             Color = Color.White;
+            if(Matrix != null) { // We already had a matrix
+                RemoveColorFilter();
+            }
             Matrix = matrix;
             var newFilter = new DreamFilterColor(); // Am I like... doing this right?
             newFilter.Color = matrix;

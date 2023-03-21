@@ -40,7 +40,7 @@ internal static class DreamProcNativeHelpers {
         }
         int WidthRange = (distance.Width - 1) >> 1; // TODO: Make rectangles work.
         int HeightRange = (distance.Height - 1) >> 1;
-        int donutCount = Math.Max(WidthRange, HeightRange); 
+        int donutCount = Math.Max(WidthRange, HeightRange);
         for(int d = 1; d <= donutCount; d++) { // for each donut
             int sideLength = d + d + 1;
             //The left column
@@ -110,7 +110,7 @@ internal static class DreamProcNativeHelpers {
                 throw new Exception($"Invalid argument: {arg}");
             }
         }
-            
+
         return (center, range);
     }
 
@@ -128,7 +128,7 @@ internal static class DreamProcNativeHelpers {
         if(!obj.IsSubtypeOf(DreamProcNativeRoot.ObjectTree.Atom)) {
             return false; // Can't see datums and nulls n stuff, I THINK???
         }
-            
+
         // https://www.byond.com/docs/ref/#/atom/var/invisibility
         if (obj.TryGetVariable("invisiblity", out DreamValue invisibility)) {
             if(invisibility.TryGetValueAsFloat(out float invisibilityValue)) {
@@ -172,7 +172,7 @@ internal static class DreamProcNativeHelpers {
             switch (list.GetLength()) {
                 case 0:
                     return true; // Just return the identity matrix. NOTE: Not sure if *exactly* parity.
-                case 1: // 0 to 5 is the rgb() string spam: 
+                case 1: // 0 to 5 is the rgb() string spam:
                 case 2: // list(rgb() or null, rgb() or null, rgb() or null, rgb() or null, rgb() or null)
                 case 3:
                 case 4:
@@ -216,7 +216,7 @@ internal static class DreamProcNativeHelpers {
                         matrix.SetRow(row, listArray[offset].MustGetValueAsFloat(),
                                            listArray[offset + 1].MustGetValueAsFloat(),
                                            listArray[offset + 2].MustGetValueAsFloat(),
-                                           listArray[offset + 2].MustGetValueAsFloat());
+                                           listArray[offset + 3].MustGetValueAsFloat());
                     }
                     return true;
                 case 20: // list(rr, rg, rb, ra, gr, gg, gb, ga, br, bg, bb, ba, ar, ag, ab, aa, cr, cg, cb, ca)
@@ -225,7 +225,7 @@ internal static class DreamProcNativeHelpers {
                         matrix.SetRow(row, listArray[offset].MustGetValueAsFloat(),
                                            listArray[offset + 1].MustGetValueAsFloat(),
                                            listArray[offset + 2].MustGetValueAsFloat(),
-                                           listArray[offset + 2].MustGetValueAsFloat());
+                                           listArray[offset + 3].MustGetValueAsFloat());
                     }
                     return true;
                 default:
