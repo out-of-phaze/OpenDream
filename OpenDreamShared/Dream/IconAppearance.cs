@@ -12,9 +12,15 @@ namespace OpenDreamShared.Dream {
         [ViewVariables] public AtomDirection Direction;
         [ViewVariables] public Vector2i PixelOffset;
         [ViewVariables] public Color Color = Color.White;
+        [ViewVariables] public byte Alpha;
         [ViewVariables] public float Layer;
+        [ViewVariables] public float Plane;
+        [ViewVariables] public float BlendMode;
+        [ViewVariables] public int AppearanceFlags = 0;
         [ViewVariables] public int Invisibility;
         [ViewVariables] public bool Opacity;
+        [ViewVariables] public string RenderSource = "";
+        [ViewVariables] public string RenderTarget = "";
         [ViewVariables] public MouseOpacity MouseOpacity = MouseOpacity.PixelOpaque;
         [ViewVariables] public List<uint> Overlays = new();
         [ViewVariables] public List<uint> Underlays = new();
@@ -32,7 +38,13 @@ namespace OpenDreamShared.Dream {
             Direction = appearance.Direction;
             PixelOffset = appearance.PixelOffset;
             Color = appearance.Color;
+            Alpha = appearance.Alpha;
             Layer = appearance.Layer;
+            Plane = appearance.Plane;
+            RenderSource = appearance.RenderSource;
+            RenderTarget = appearance.RenderTarget;
+            BlendMode = appearance.BlendMode;
+            AppearanceFlags = appearance.AppearanceFlags;
             Invisibility = appearance.Invisibility;
             Opacity = appearance.Opacity;
             MouseOpacity = appearance.MouseOpacity;
@@ -55,7 +67,13 @@ namespace OpenDreamShared.Dream {
             if (appearance.Direction != Direction) return false;
             if (appearance.PixelOffset != PixelOffset) return false;
             if (appearance.Color != Color) return false;
+            if (appearance.Alpha != Alpha) return false;
             if (appearance.Layer != Layer) return false;
+            if (appearance.Plane != Plane) return false;
+            if (appearance.RenderSource != RenderSource) return false;
+            if (appearance.RenderTarget != RenderTarget) return false;
+            if (appearance.BlendMode != BlendMode) return false;
+            if (appearance.AppearanceFlags != AppearanceFlags) return false;
             if (appearance.Invisibility != Invisibility) return false;
             if (appearance.Opacity != Opacity) return false;
             if (appearance.MouseOpacity != MouseOpacity) return false;
@@ -94,6 +112,12 @@ namespace OpenDreamShared.Dream {
             hashCode.Add(Invisibility);
             hashCode.Add(Opacity);
             hashCode.Add(MouseOpacity);
+            hashCode.Add(Alpha);
+            hashCode.Add(Plane);
+            hashCode.Add(RenderSource);
+            hashCode.Add(RenderTarget);
+            hashCode.Add(BlendMode);
+            hashCode.Add(AppearanceFlags);
 
             foreach (int overlay in Overlays) {
                 hashCode.Add(overlay);
