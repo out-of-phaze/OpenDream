@@ -1,4 +1,4 @@
-﻿using Robust.Client.Graphics;
+using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Enums;
 using Robust.Shared.Map;
@@ -298,7 +298,10 @@ sealed class DreamViewOverlay : Overlay {
         if(parentIcon != null){
             current.ClickUID = parentIcon.ClickUID;
             if((icon.Appearance.AppearanceFlags & 2) == 2 || keepTogether) //RESET_COLOR
-                current.ColorToApply = icon.Appearance.Color;
+                if(icon.Appearance.SillyColorFilter is null)
+                    current.ColorToApply = icon.Appearance.Color;
+                else
+                    current.ColorToApply = Color.White;
             else
                 current.ColorToApply = parentIcon.ColorToApply;
 
@@ -322,7 +325,10 @@ sealed class DreamViewOverlay : Overlay {
             else
                 current.Layer = icon.Appearance.Layer;
         } else {
-            current.ColorToApply = icon.Appearance.Color;
+            if(icon.Appearance.SillyColorFilter is null)
+                current.ColorToApply = icon.Appearance.Color;
+            else
+                current.ColorToApply = Color.White;
             current.AlphaToApply = icon.Appearance.Alpha/255.0f;
             current.TransformToApply = iconAppearanceTransformMatrix;
             current.Plane = icon.Appearance.Plane;
