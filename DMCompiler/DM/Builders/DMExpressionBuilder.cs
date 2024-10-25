@@ -1024,6 +1024,7 @@ internal class DMExpressionBuilder(ExpressionContext ctx, DMExpressionBuilder.Sc
                 case DMASTDereference.CallOperation callOperation: {
                     var field = callOperation.Identifier;
                     var argumentList = BuildArgumentList(deref.Expression.Location, callOperation.Parameters, inferredPath);
+                    DreamPath? nextPath = null;
 
                     if (!callOperation.NoSearch && !pathIsFuzzy) {
                         if (prevPath == null) {
@@ -1034,6 +1035,9 @@ internal class DMExpressionBuilder(ExpressionContext ctx, DMExpressionBuilder.Sc
                             return UnknownReference(callOperation.Location, $"Type {prevPath.Value} does not exist");
                         if (!fromObject.HasProc(field))
                             return UnknownIdentifier(callOperation.Location, field);
+
+                        var returnTypes = fromObject.GetProcReturnTypes(field) ?? DMValueType.Anything;
+                        nextPath = returnTypes.IsPath ? returnTypes.TypePath : returnTypes.AsPath();
                     }
 
                     operation = new Dereference.CallOperation {
@@ -1042,8 +1046,9 @@ internal class DMExpressionBuilder(ExpressionContext ctx, DMExpressionBuilder.Sc
                         Identifier = field,
                         Path = prevPath
                     };
-                    prevPath = null;
-                    pathIsFuzzy = true;
+                    prevPath = nextPath;
+                    if(prevPath is null)
+                        pathIsFuzzy = true;
                     break;
                 }
 
