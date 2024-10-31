@@ -2801,7 +2801,7 @@ namespace DMCompiler.Compiler.DM {
                     if (outListTypes is null)
                         outListTypes = listTypes;
                     else {
-                        outListTypes |= listTypes;
+                        outListTypes = DMListValueTypes.MergeListValueTypes(compiler, outListTypes, listTypes);
                     }
                 }
 
